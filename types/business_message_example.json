@@ -1,0 +1,38 @@
+{
+    "messages": [
+        {
+            "key": {
+                "remoteJid": "923234311349@s.whatsapp.net",
+                "fromMe": false,
+                "id": "7186B16EF76EB27C410CCC308398E4BD"
+            },
+            "messageTimestamp": 1684829525,
+            "pushName": "WA-GPT",
+            "broadcast": false,
+            "message": {
+                "extendedTextMessage": {
+                    "text": "hi",
+                    "previewType": "NONE",
+                    "contextInfo": {
+                        "expiration": 86400,
+                        "ephemeralSettingTimestamp": "1678606479",
+                        "disappearingMode": {
+                            "initiator": "INITIATED_BY_ME"
+                        }
+                    },
+                    "inviteLinkGroupTypeV2": "DEFAULT"
+                },
+                "messageContextInfo": {
+                    "deviceListMetadata": {
+                        "senderTimestamp": "1683904268",
+                        "recipientKeyHash": "7w1eTidQuaukqw==",
+                        "recipientTimestamp": "1684816947"
+                    },
+                    "deviceListMetadataVersion": 2
+                }
+            },
+            "verifiedBizName": "WA-GPT"
+        }
+    ],
+    "type": "notify"
+}

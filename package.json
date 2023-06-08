@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "tsc index.ts || node index.js"
+  },
+  "dependencies": {
+    "@adiwajshing/keyed-db": "^0.2.4",
+    "@whiskeysockets/baileys": "^6.0.1",
+    "express": "^4.18.2",
+    "socket.io": "^4.6.2"
+  }
+}

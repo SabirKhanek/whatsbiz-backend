@@ -1,0 +1,46 @@
+{
+    "messages": [
+        {
+            "key": {
+                "remoteJid": "923234311349@s.whatsapp.net",
+                "fromMe": false,
+                "id": "E87147CC5EE46DB3249AF1D256A8C51C"
+            },
+            "messageTimestamp": 1684908604,
+            "pushName": "WA-GPT",
+            "broadcast": false,
+            "message": {
+                "documentMessage": {
+                    "url": "https://mmg.whatsapp.net/v/t62.7119-24/32123539_221183870737588_3127628250101741598_n.enc?ccb=11-4&oh=01_AdTwcUmsubLuMfRG6MOKWAy9lpR2dwlgHRCmrjqSTbbAlw&oe=64950A16&mms3=true",
+                    "mimetype": "image/jpeg",
+                    "title": "Screenshot_2023-05-24-11-01-34-05.jpg",
+                    "fileSha256": "TQdeddiVA51eQVrtfDCeh0P4SvudSpL0mg5IrhA8loQ=",
+                    "fileLength": "463768",
+                    "pageCount": 0,
+                    "mediaKey": "utBaTp8eP8idKg3LX7IGALPJG6tFOAPcwtNQBF4aAJE=",
+                    "fileName": "Screenshot_2023-05-24-11-01-34-05.jpg",
+                    "fileEncSha256": "qwnHgCH6CGApKLe3gqYz9tNNR+YrDgbAGDmPmhz/CGM=",
+                    "directPath": "/v/t62.7119-24/32123539_221183870737588_3127628250101741598_n.enc?ccb=11-4&oh=01_AdTwcUmsubLuMfRG6MOKWAy9lpR2dwlgHRCmrjqSTbbAlw&oe=64950A16",
+                    "mediaKeyTimestamp": "1684908549",
+                    "contextInfo": {
+                        "expiration": 86400,
+                        "ephemeralSettingTimestamp": "1678606479",
+                        "disappearingMode": {
+                            "initiator": "INITIATED_BY_ME"
+                        }
+                    }
+                },
+                "messageContextInfo": {
+                    "deviceListMetadata": {
+                        "senderTimestamp": "1683904268",
+                        "recipientKeyHash": "7w1eTidQuaukqw==",
+                        "recipientTimestamp": "1684816947"
+                    },
+                    "deviceListMetadataVersion": 2
+                }
+            },
+            "verifiedBizName": "WA-GPT"
+        }
+    ],
+    "type": "notify"
+}

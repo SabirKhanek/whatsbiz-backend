@@ -1,0 +1,27 @@
+{
+    "messages": [
+        {
+            "key": {
+                "remoteJid": "923412727290@s.whatsapp.net",
+                "fromMe": false,
+                "id": "044E04AC3FAB932C73C00FDCE3A705B6"
+            },
+            "messageTimestamp": 1684829596,
+            "pushName": "Sabir",
+            "broadcast": false,
+            "message": {
+                "conversation": "hi",
+                "messageContextInfo": {
+                    "deviceListMetadata": {
+                        "senderKeyHash": "Le4dCQNzqVAnNQ==",
+                        "senderTimestamp": "1683919800",
+                        "recipientKeyHash": "7w1eTidQuaukqw==",
+                        "recipientTimestamp": "1684816947"
+                    },
+                    "deviceListMetadataVersion": 2
+                }
+            }
+        }
+    ],
+    "type": "notify"
+}

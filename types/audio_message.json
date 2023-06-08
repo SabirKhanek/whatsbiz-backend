@@ -1,0 +1,39 @@
+{
+    "messages": [
+        {
+            "key": {
+                "remoteJid": "923412727290@s.whatsapp.net",
+                "fromMe": false,
+                "id": "CCD486AF40FC73046E7CDE0343C63132"
+            },
+            "messageTimestamp": 1684830484,
+            "pushName": "Sabir",
+            "broadcast": false,
+            "message": {
+                "audioMessage": {
+                    "url": "https://mmg.whatsapp.net/v/t62.7117-24/29552549_944116456733579_3462463090016638966_n.enc?ccb=11-4&oh=01_AdQAfWN9mpQ5Xh4P49FEI8dVr4BCSdRQCnC1wgIo-hJg9Q&oe=6493FD07&mms3=true",
+                    "mimetype": "audio/ogg; codecs=opus",
+                    "fileSha256": "6aPGMlWxAwzV6OCc07FNur20ivtx3g7XbqGOw383YGE=",
+                    "fileLength": "3735",
+                    "seconds": 1,
+                    "ptt": true,
+                    "mediaKey": "xw4OLza6mHFU5sTOO3FnpMOU+X/aUWwXrsNRxgaKrKw=",
+                    "fileEncSha256": "bTbOCXE4gcbyyKuw0X/JhxAmJVoS2eA5YLuAhPdR+ZE=",
+                    "directPath": "/v/t62.7117-24/29552549_944116456733579_3462463090016638966_n.enc?ccb=11-4&oh=01_AdQAfWN9mpQ5Xh4P49FEI8dVr4BCSdRQCnC1wgIo-hJg9Q&oe=6493FD07",
+                    "mediaKeyTimestamp": "1684830483",
+                    "waveform": "AAAAAAAAAAwbGRMMBAEABAwNBAAAAAAFGSgnJygqKywkGxkXEQsFAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+                },
+                "messageContextInfo": {
+                    "deviceListMetadata": {
+                        "senderKeyHash": "Le4dCQNzqVAnNQ==",
+                        "senderTimestamp": "1683919800",
+                        "recipientKeyHash": "7w1eTidQuaukqw==",
+                        "recipientTimestamp": "1684816947"
+                    },
+                    "deviceListMetadataVersion": 2
+                }
+            }
+        }
+    ],
+    "type": "notify"
+}

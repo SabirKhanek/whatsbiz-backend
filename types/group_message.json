@@ -1,0 +1,32 @@
+{
+    "messages": [
+        {
+            "key": {
+                "remoteJid": "120363075182937690@g.us",
+                "fromMe": false,
+                "id": "DCA6951904521FF4ECE86E092EA0E934",
+                "participant": "923412727290@s.whatsapp.net"
+            },
+            "messageTimestamp": 1684830682,
+            "pushName": "Sabir",
+            "broadcast": false,
+            "message": {
+                "conversation": "group message",
+                "senderKeyDistributionMessage": {
+                    "groupId": "120363075182937690@g.us",
+                    "axolotlSenderKeyDistributionMessage": "MwiryvIvED4aIH282XPLX3rSdtdG6DxV2q5oS2QnZFOxrpV/X56BDGSlIiEFp308V/4k1aoPNNrIeoXldw6br1W4dMhQ/lOO+YuqQGE="
+                },
+                "messageContextInfo": {
+                    "deviceListMetadata": {
+                        "senderKeyHash": "Le4dCQNzqVAnNQ==",
+                        "senderTimestamp": "1683919800",
+                        "recipientKeyHash": "7w1eTidQuaukqw==",
+                        "recipientTimestamp": "1684816947"
+                    },
+                    "deviceListMetadataVersion": 2
+                }
+            }
+        }
+    ],
+    "type": "notify"
+}

@@ -1,0 +1,48 @@
+{
+    "messages": [
+        {
+            "key": {
+                "remoteJid": "923412727290@s.whatsapp.net",
+                "fromMe": false,
+                "id": "D822C37FC7AD4F4ED935A5FA14ED4F2A"
+            },
+            "messageTimestamp": 1684830404,
+            "pushName": "Sabir",
+            "broadcast": false,
+            "message": {
+                "imageMessage": {
+                    "url": "https://mmg.whatsapp.net/v/t62.7118-24/40753010_1547667359098593_1671535481014635703_n.enc?ccb=11-4&oh=01_AdSvsduRDcEbwbEPv4VgRWzy8ltm7leXWCBmKQhzFcg8HQ&oe=6493E0EB&mms3=true",
+                    "mimetype": "image/jpeg",
+                    "caption": "test",
+                    "fileSha256": "L86rdLomvyo+BEsAyUr7/keq/xqkBuyPcOZUiQxOHJQ=",
+                    "fileLength": "69402",
+                    "height": 1280,
+                    "width": 576,
+                    "mediaKey": "4rV7Cxwe5FPhWMMvT5MJdleu2jprvwGz8qkahCjXLz4=",
+                    "fileEncSha256": "S33YBtk3Gd7n6kNMrnvFoOuRKXS/MIj2fvnupNaiFrY=",
+                    "directPath": "/v/t62.7118-24/40753010_1547667359098593_1671535481014635703_n.enc?ccb=11-4&oh=01_AdSvsduRDcEbwbEPv4VgRWzy8ltm7leXWCBmKQhzFcg8HQ&oe=6493E0EB",
+                    "mediaKeyTimestamp": "1684830403",
+                    "jpegThumbnail": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEABsbGxscGx4hIR4qLSgtKj04MzM4PV1CR0JHQl2NWGdYWGdYjX2Xe3N7l33gsJycsOD/2c7Z//////////////8BGxsbGxwbHiEhHiotKC0qPTgzMzg9XUJHQkdCXY1YZ1hYZ1iNfZd7c3uXfeCwnJyw4P/Zztn////////////////CABEIAEgAIAMBIgACEQEDEQH/xAAuAAACAwEBAAAAAAAAAAAAAAACBQABBAMGAQEBAQAAAAAAAAAAAAAAAAAAAQL/2gAMAwEAAhADEAAAAEY6hrnd9IgsMhnpxgNXJ2Uq2meiXoaINZ9DfnSElyAXIf/EACYQAAICAQMDAwUAAAAAAAAAAAECAAMREiExBRVTBBQyIkJRcZH/2gAIAQEAAT8AAcgbN/IA4YawQIFBzuYytpOMxbHUDDRnazk5xOODzAdnyxEKJpGGmlB9xmk/mfsz2yhMkx62yoK7Exun1ohc52EorS1yMECepsZAoB3EruVtCnmWva9ZIfONsQVisB25j9Jqscks07NQo+UHS0V9Qdo/o0cYOYtwZn+kjSZrBmtYpBjdYOPgJ3hvEJ3lvEJ3lvGIAYFbE3nM/8QAGBEAAgMAAAAAAAAAAAAAAAAAEBEAASD/2gAIAQIBAT8ADjCvP//EABcRAAMBAAAAAAAAAAAAAAAAAAARIAH/2gAIAQMBAT8Ahjyf/9k=",
+                    "scansSidecar": "kfl7n3bnf2zDk1u6RbVUwFwWGZefZsCRFsAp/Msa7oWv6KGuPpOq0g==",
+                    "scanLengths": [
+                        6912,
+                        31582,
+                        13513,
+                        17395
+                    ],
+                    "midQualityFileSha256": "P8OmkDYn+NZgpmCixgu8aKvHLpjdTaGmcE2n84a7Qx4="
+                },
+                "messageContextInfo": {
+                    "deviceListMetadata": {
+                        "senderKeyHash": "Le4dCQNzqVAnNQ==",
+                        "senderTimestamp": "1683919800",
+                        "recipientKeyHash": "7w1eTidQuaukqw==",
+                        "recipientTimestamp": "1684816947"
+                    },
+                    "deviceListMetadataVersion": 2
+                }
+            }
+        }
+    ],
+    "type": "notify"
+}

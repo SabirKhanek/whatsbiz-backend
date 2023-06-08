@@ -1,0 +1,8 @@
+### send text message
+POST http://localhost:3000/api/send-message HTTP/1.1
+Content-Type: application/json
+
+{
+    "number":"923412727290",
+    "message": "Hello World"
+}

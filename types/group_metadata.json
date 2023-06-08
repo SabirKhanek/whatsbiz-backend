@@ -1,0 +1,20 @@
+{
+    id: '120363075182937690@g.us',
+    subject: 'test 2',
+    subjectOwner: '923414976675@s.whatsapp.net',
+    subjectTime: 1679039264,
+    size: 2,
+    creation: 1679039264,
+    owner: '923414976675@s.whatsapp.net',
+    desc: undefined,
+    descId: undefined,
+    restrict: false,
+    announce: false,
+    participants: [
+        { id: '923412727290@s.whatsapp.net', admin: null
+        },
+        { id: '923414976675@s.whatsapp.net', admin: 'superadmin'
+        }
+    ],
+    ephemeralDuration: undefined
+}

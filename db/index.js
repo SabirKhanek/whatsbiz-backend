@@ -113,4 +113,12 @@ db.function('mergestr', (a, b) => {
     return a + ' ' + b;
 })
 
+db.function('extract_phoneno', (str) => {
+    if (!str || typeof str !== 'string') return '-'
+    if (str.length <= 0) return '-'
+    const indexOfAtSign = str.indexOf('@')
+    if (indexOfAtSign < 0) return str
+    return str.slice(0, indexOfAtSign)
+})
+
 module.exports.db = db

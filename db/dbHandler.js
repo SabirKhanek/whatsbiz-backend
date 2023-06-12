@@ -20,6 +20,44 @@ const queryInsertProduct = db.prepare(`INSERT INTO PRODUCT (intent, chatId, name
 
 const queryInsertProcessedMessage = db.prepare(`INSERT INTO PROCESSED_MESSAGES (message_id) VALUES (?)`)
 
+//products queries
+const queryProducts = db.prepare(`SELECT 
+    product.intent AS intent,
+    product.name AS name,
+    product.type AS type,
+    product.brand AS brand,
+    product.quantity AS quantity,
+    product.condition AS condition,
+    product.price AS price,
+    product.remarks AS Remarks,
+    product.ram AS ram,
+    product.color AS color,
+    product.storage AS storage,
+    product.processor AS processor,
+    chat.chatName AS chatName,
+    chat.chatMessage AS message,
+    extract_phoneno(chat.chatMessageAuthor) AS author,
+    datetime(chat.chatMessageTime, 'unixepoch') AS messagetime
+FROM 
+    Chat chat
+JOIN 
+    Product product ON chat.id = product.chatId
+WHERE
+    (:intent IS NULL OR lower(product.intent) = lower(:intent))
+    AND (:name IS NULL OR lower(product.name) LIKE '%' || lower(:name) || '%')
+    AND (:author IS NULL OR lower(extract_phoneno(chat.chatMessageAuthor)) = lower(:author))
+    AND (:messagetime IS NULL OR chat.chatMessageTime >= :messagetime)`);
+
+module.exports.getProducts = (intent, name, author, messagetime) => {
+    return queryProducts.all({
+        intent: intent || null,
+        name: name || null,
+        author: author || null,
+        messagetime: messagetime || null
+    });
+};
+
+// console.log(exports.getProducts('SELL', 'IPHONE', 'Jubel Shaikh | JK Electronics').length);
 
 
 

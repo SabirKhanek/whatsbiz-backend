@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers');
 
+router.use('/data', require('./api_data'));
+
 router.get('/', (req, res) => {
     res.send('api works')
 })

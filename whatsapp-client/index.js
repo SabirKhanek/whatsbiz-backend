@@ -101,6 +101,7 @@ var initSocket = function () { return __awaiter(void 0, void 0, void 0, function
                 sock = (0, baileys_1.default)({
                     version: version,
                     logger: logger,
+                    browser: baileys_1.Browsers.ubuntu('Desktop'),
                     printQRInTerminal: false,
                     auth: {
                         creds: state.creds,

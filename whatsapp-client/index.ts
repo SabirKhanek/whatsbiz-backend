@@ -1,5 +1,5 @@
 import { Boom } from '@hapi/boom'
-import makeWASocket, { AnyMessageContent, delay, DisconnectReason, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, makeInMemoryStore, proto, useMultiFileAuthState, WAMessageContent, WAMessageKey, downloadMediaMessage } from '@whiskeysockets/baileys'
+import makeWASocket, { AnyMessageContent, delay, DisconnectReason, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, makeInMemoryStore, proto, useMultiFileAuthState, WAMessageContent, WAMessageKey, downloadMediaMessage, Browsers } from '@whiskeysockets/baileys'
 import MAIN_LOGGER from '@whiskeysockets/baileys/lib/Utils/logger'
 import * as fs from 'fs'
 import { writeFile } from 'fs/promises'
@@ -71,6 +71,7 @@ const initSocket = async () => {
     sock = makeWASocket({
         version,
         logger,
+        browser: Browsers.ubuntu('Desktop'),
         printQRInTerminal: false,
         auth: {
             creds: state.creds,

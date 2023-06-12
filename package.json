@@ -5,7 +5,11 @@
   "dependencies": {
     "@adiwajshing/keyed-db": "^0.2.4",
     "@whiskeysockets/baileys": "^6.0.1",
+    "better-sqlite3": "^8.4.0",
+    "dotenv": "^16.1.4",
     "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.0",
     "socket.io": "^4.6.2"
   }
 }

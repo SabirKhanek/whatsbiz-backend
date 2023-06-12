@@ -6,3 +6,12 @@ Content-Type: application/json
     "number":"923412727290",
     "message": "Hello World"
 }
+
+### authenticate user
+POST http://localhost:3000/authenticate HTTP/1.1
+Content-Type: application/json
+
+{
+    "username":"alex",
+    "password": "alex_asselin"
+}

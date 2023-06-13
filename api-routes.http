@@ -18,4 +18,24 @@ Content-Type: application/json
 
 ### get products
 GET http://localhost:3000/api/data/get_products HTTP/1.1
+authorization: jwt AUTH TOKEN
 Content-Type: application/json
+
+### get config
+GET http://localhost:3000/api/config HTTP/1.1
+Content-Type: application/json
+authorization: jwt AUTH TOKEN
+
+### get config by key
+GET http://localhost:3000/api/config?key=newMessageInterval HTTP/1.1
+Content-Type: application/json
+authorization: jwt AUTH TOKEN
+
+### save config
+POST  http://localhost:3000/api/config/save HTTP/1.1
+Content-Type: application/json
+authorization: jwt AUTH TOKEN
+
+{
+    "pairs":[{"key":"newMessageInterval","value":"360000"}]
+}

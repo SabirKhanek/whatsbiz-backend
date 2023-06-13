@@ -59,7 +59,11 @@ module.exports.getProducts = (intent, name, author, messagetime) => {
 
 // console.log(exports.getProducts('SELL', 'IPHONE', 'Jubel Shaikh | JK Electronics').length);
 
-
+module.exports.getServerConfig = () => {
+    return {
+        newMessageInterval: 60 * 1000
+    }
+}
 
 const registerClassifiedMessage = (message, intent) => {
     const messageInDb = queryGetClassifiedMessage.get(message);
@@ -97,8 +101,13 @@ const saveIntent = (intent) => {
 
 function ifMessageExist(id = 0, body) {
     const messageInDb = queryGetMessageId.get(id, body);
-    if (messageInDb) return true
-    else false
+    if (messageInDb !== undefined) {
+        console.log('here in ifMessageExist')
+        return true
+    } else {
+        console.log('here in else')
+        return false
+    }
 }
 
 function getMessageIds() {
@@ -149,6 +158,24 @@ function saveNewMessage(message) {
     queryInsertIntoNewMessages.run(JSON.stringify(message))
 }
 
+function setConfig(key = 0, value = 0) {
+    const query = db.prepare(`INSERT OR REPLACE INTO CONFIG (key, value) VALUES (?, ?)`);
+    query.run(key, value);
+}
+
+function getConfig(key = 0) {
+    const query = db.prepare(`SELECT value FROM CONFIG WHERE key = ?`);
+    const result = query.get(key);
+    return result ? result.value : null;
+}
+
+function getAllConfigPairs() {
+    const query = db.prepare(`SELECT key, value FROM CONFIG`);
+    const result = query.all();
+    return result;
+}
+
+module.exports.config = { get: getConfig, set: setConfig, getAll: getAllConfigPairs }
 module.exports.newMessages = { get: getNewMessages, save: saveNewMessage, delete: deleteNewMessages }
 module.exports.saveIntents = saveIntents;
 module.exports.registerMessageInDB = registerMessageInDB;

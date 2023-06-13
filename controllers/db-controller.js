@@ -15,5 +15,4 @@ module.exports.getProducts = (req, res) => {
         console.error('Error retrieving products:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-
 }

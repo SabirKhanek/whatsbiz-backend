@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers');
+const authController = require('../controllers/auth-controller');
 
-router.use('/data', require('./api_data'));
-
-router.get('/', (req, res) => {
-    res.send('api works')
-})
+router.use('/data', authController.validateToken, require('./api_data'));
+router.use('/config', authController.validateToken, require('./api_config'))
 
 router.get('/is-wa-connected', controller.isWAConnected)
 

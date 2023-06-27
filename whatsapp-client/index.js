@@ -155,27 +155,33 @@ var initSocket = function () { return __awaiter(void 0, void 0, void 0, function
                     });
                 }); });
                 sock.ev.on('messages.upsert', function (upsert) { return __awaiter(void 0, void 0, void 0, function () {
-                    var _i, _a, msg, messageObj;
+                    var _i, _a, msg, messageObj, err_1;
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                if (!(upsert.type === 'notify')) return [3 /*break*/, 4];
+                                if (!(upsert.type === 'notify')) return [3 /*break*/, 6];
                                 _i = 0, _a = upsert.messages;
                                 _b.label = 1;
                             case 1:
-                                if (!(_i < _a.length)) return [3 /*break*/, 4];
+                                if (!(_i < _a.length)) return [3 /*break*/, 6];
                                 msg = _a[_i];
-                                if (!(!msg.key.fromMe && doReplies)) return [3 /*break*/, 3];
+                                if (!(!msg.key.fromMe && doReplies)) return [3 /*break*/, 5];
+                                _b.label = 2;
+                            case 2:
+                                _b.trys.push([2, 4, , 5]);
                                 messageObj = extractMessageInfo(msg);
                                 waClientEventHandler.emit('new-text-message', messageObj);
                                 return [4 /*yield*/, (sock === null || sock === void 0 ? void 0 : sock.readMessages([msg.key]))];
-                            case 2:
-                                _b.sent();
-                                _b.label = 3;
                             case 3:
+                                _b.sent();
+                                return [3 /*break*/, 5];
+                            case 4:
+                                err_1 = _b.sent();
+                                return [3 /*break*/, 5];
+                            case 5:
                                 _i++;
                                 return [3 /*break*/, 1];
-                            case 4: return [2 /*return*/];
+                            case 6: return [2 /*return*/];
                         }
                     });
                 }); });
@@ -286,7 +292,7 @@ function setTypingStatus(recipient) {
 }
 function sendTextMessage(recipient, text) {
     return __awaiter(this, void 0, void 0, function () {
-        var err_1;
+        var err_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -300,9 +306,9 @@ function sendTextMessage(recipient, text) {
                     _a.sent();
                     return [3 /*break*/, 3];
                 case 2:
-                    err_1 = _a.sent();
-                    console.log('Error sending text message: ', err_1);
-                    throw new Error("Error sending text message: ".concat(err_1));
+                    err_2 = _a.sent();
+                    console.log('Error sending text message: ', err_2);
+                    throw new Error("Error sending text message: ".concat(err_2));
                 case 3: return [2 /*return*/];
             }
         });
@@ -311,7 +317,7 @@ function sendTextMessage(recipient, text) {
 function sendImageMessage(recipient, imageUrl, caption) {
     if (caption === void 0) { caption = ""; }
     return __awaiter(this, void 0, void 0, function () {
-        var err_2;
+        var err_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -324,8 +330,8 @@ function sendImageMessage(recipient, imageUrl, caption) {
                     _a.sent();
                     return [3 /*break*/, 4];
                 case 3:
-                    err_2 = _a.sent();
-                    console.log('Error sending image message: ', err_2);
+                    err_3 = _a.sent();
+                    console.log('Error sending image message: ', err_3);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

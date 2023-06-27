@@ -29,7 +29,7 @@ const queryProducts = db.prepare(`SELECT
     product.quantity AS quantity,
     product.condition AS condition,
     product.price AS price,
-    product.remarks AS Remarks,
+    product.remarks AS remarks,
     product.ram AS ram,
     product.color AS color,
     product.storage AS storage,
@@ -45,8 +45,160 @@ JOIN
 WHERE
     (:intent IS NULL OR lower(product.intent) = lower(:intent))
     AND (:name IS NULL OR lower(product.name) LIKE '%' || lower(:name) || '%')
-    AND (:author IS NULL OR lower(extract_phoneno(chat.chatMessageAuthor)) = lower(:author))
+    AND (:author IS NULL OR lower(extract_phoneno(chat.chatMessageAuthor)) LIKE lower(:author) || '%')
     AND (:messagetime IS NULL OR chat.chatMessageTime >= :messagetime)`);
+
+function getDailyAnalytics() {
+    const sqlQuery = `
+            WITH RECURSIVE days(label, sort) AS (
+                SELECT
+                    CAST(strftime('%w', 'now') AS INTEGER),
+                    0
+                UNION ALL
+                SELECT
+                    CASE
+                        WHEN label = 0 THEN 6
+                        ELSE label - 1
+                    END,
+                    sort + 1
+                FROM
+                    days
+                WHERE
+                    sort < 6
+            )
+            SELECT
+                days.label,
+                COUNT(CASE WHEN lower(p.intent) = 'buy' THEN 1 END) AS nbuys,
+                COUNT(CASE WHEN lower(s.intent) = 'sell' THEN 1 END) AS nsells
+            FROM
+                days
+                LEFT JOIN (
+                    SELECT
+                        CAST(strftime('%w', datetime(chatMessageTime, 'unixepoch')) AS INTEGER) AS label,
+                        intent
+                    FROM
+                        Chat
+                        JOIN Product ON Chat.id = Product.chatId
+                    WHERE
+                        chatMessageTime >= strftime('%s', 'now', '-7 days')
+                ) AS p ON days.label = p.label
+                LEFT JOIN (
+                    SELECT
+                        CAST(strftime('%w', datetime(chatMessageTime, 'unixepoch')) AS INTEGER) AS label,
+                        intent
+                    FROM
+                        Chat
+                        JOIN Product ON Chat.id = Product.chatId
+                    WHERE
+                        chatMessageTime >= strftime('%s', 'now', '-7 days')
+                ) AS s ON days.label = s.label
+            GROUP BY
+                days.sort
+            ORDER BY
+                days.sort;
+        `;
+
+    const result = db.prepare(sqlQuery).all();
+
+    // Define an array to map the label values to day names
+    const labelMapping = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    // Transform the label values to day names
+    const transformedResult = result.map(item => {
+        return {
+            label: labelMapping[item.label],
+            nbuys: item.nbuys || 0,
+            nsells: item.nsells || 0
+        };
+    });
+
+    // Return the extracted data
+    return transformedResult;
+}
+
+
+function getMonthlyAnalytics() {
+    const sqlQuery = `
+        WITH months(month, sort) AS (
+            SELECT
+                strftime('%m', 'now', '-0 month'),
+                0
+            UNION ALL
+            SELECT
+                CASE
+                    WHEN month = '01' THEN '12'
+                    ELSE printf('%02d', CAST(month AS INTEGER) - 1)
+                END,
+                sort + 1
+            FROM
+                months
+            WHERE
+                sort < 11
+        )
+        SELECT
+            months.month,
+            COUNT(CASE WHEN lower(p.intent) = 'buy' THEN 1 END) AS nbuys,
+            COUNT(CASE WHEN lower(p.intent) = 'sell' THEN 1 END) AS nsells
+        FROM
+            months
+            LEFT JOIN (
+                SELECT
+                    strftime('%m', datetime(chatMessageTime, 'unixepoch')) AS month,
+                    intent
+                FROM
+                    Chat
+                    JOIN Product ON Chat.id = Product.chatId
+                WHERE
+                    chatMessageTime >= strftime('%s', 'now', '-365 days')
+            ) AS p ON months.month = p.month
+        GROUP BY
+            months.sort
+        ORDER BY
+            months.sort;
+    `;
+
+    const result = db.prepare(sqlQuery).all();
+
+    // Define an array to map the month values to month names
+    const monthMapping = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    // Transform the month values to month names
+    const transformedResult = result.map(item => {
+        return {
+            label: monthMapping[parseInt(item.month, 10) - 1],
+            nbuys: item.nbuys || 0,
+            nsells: item.nsells || 0
+        };
+    });
+
+    // Return the extracted data
+    return transformedResult;
+}
+
+const getProductAnalytics = (timePeriod) => {
+    if (timePeriod === 'daily') {
+        return getDailyAnalytics();
+    } else if (timePeriod === 'monthly') {
+        return getMonthlyAnalytics();
+    }
+}
+
+function addUser(username, password) {
+    const userExists = db.prepare('SELECT COUNT(*) as count FROM USER WHERE username = ?').get(username).count > 0;
+
+    if (userExists) {
+        db.prepare('UPDATE USER SET password = ? WHERE username = ?').run(password, username);
+    } else {
+        db.prepare('INSERT INTO USER (username, password) VALUES (?, ?)').run(username, password);
+    }
+}
+
+module.exports.addUser = addUser;
+
+module.exports.getProductAnalytics = getProductAnalytics;
 
 module.exports.getProducts = (intent, name, author, messagetime) => {
     return queryProducts.all({

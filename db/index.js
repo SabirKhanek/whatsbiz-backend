@@ -126,3 +126,4 @@ db.function('extract_phoneno', (str) => {
 })
 
 module.exports.db = db
+module.exports.db_path = DB_PATH

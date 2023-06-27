@@ -128,9 +128,13 @@ const initSocket = async () => {
         if (upsert.type === 'notify') {
             for (const msg of upsert.messages) {
                 if (!msg.key.fromMe && doReplies) {
-                    const messageObj = extractMessageInfo(msg);
-                    waClientEventHandler.emit('new-text-message', messageObj)
-                    await sock?.readMessages([msg.key])
+                    try {
+                        const messageObj = extractMessageInfo(msg);
+                        waClientEventHandler.emit('new-text-message', messageObj)
+                        await sock?.readMessages([msg.key])
+                    } catch (err) {
+
+                    }
                 }
             }
         }

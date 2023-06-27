@@ -1,6 +1,7 @@
 const { db } = require('./');
 const ExcelJS = require('exceljs');
 const { add_pivot } = require('./pivotTable');
+const { getProducts } = require('./dbHandler')
 
 function generateProductData(time_filter) {
     const query = `
@@ -37,8 +38,10 @@ function generateProductData(time_filter) {
     return data
 }
 
-async function generateProductExcel(time_filter = (new Date().getTime() / 1000)) {
-    const data = generateProductData(time_filter);
+async function generateProductExcel(intent, name, author, messagetime) {
+    console.log(intent, name, author, messagetime)
+    const data = getProducts(intent, name, author, messagetime)
+    console.log(data)
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Products');

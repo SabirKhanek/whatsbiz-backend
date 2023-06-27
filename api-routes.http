@@ -12,13 +12,18 @@ POST http://localhost:3000/authenticate HTTP/1.1
 Content-Type: application/json
 
 {
-    "username":"alex",
-    "password": "alex_asselin"
+    "username":"user",
+    "password": "anypass"
 }
 
 ### get products
-GET http://localhost:3000/api/data/get_products HTTP/1.1
-authorization: jwt AUTH TOKEN
+GET http://localhost:3000/api/data/get_products?name=iphone xr&author=971569467623 HTTP/1.1
+authorization: auth-jwt
+Content-Type: application/json
+
+### get products
+GET http://localhost:3000/api/data/get_products_excel?&name=iphone xr&author=jubel HTTP/1.1
+authorization: auth-jwt
 Content-Type: application/json
 
 ### get config
@@ -29,13 +34,39 @@ authorization: jwt AUTH TOKEN
 ### get config by key
 GET http://localhost:3000/api/config?key=newMessageInterval HTTP/1.1
 Content-Type: application/json
-authorization: jwt AUTH TOKEN
+authorization: auth-jwt
 
 ### save config
 POST  http://localhost:3000/api/config/save HTTP/1.1
 Content-Type: application/json
-authorization: jwt AUTH TOKEN
+authorization: auth-jwt
 
 {
-    "pairs":[{"key":"newMessageInterval","value":"360000"}]
+    "pairs":[{"key":"newMessageInterval","value":"10"}, {"key":"openai_key","value":"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"}]
+}
+
+### generate deal initiate message
+GET http://localhost:3000/api/ai/generate-proposal
+Content-Type: application/json
+authorization: auth-jwt
+
+{
+    "intent": "buy",
+    "product": "iphone xr",
+    "ram": "4gb",
+    "storage": "64gb",
+    "color": "black"
+}
+
+### get prd buy sell analytics
+GET http://localhost:3000/api/analytics/product-buy-sell?time_frame=daily
+
+### add user
+POST http://localhost:3000/api/add_user HTTP/1.1
+Content-Type: application/json
+
+{
+    "secret":"",
+    "username":"user",
+    "password": "anypass"
 }

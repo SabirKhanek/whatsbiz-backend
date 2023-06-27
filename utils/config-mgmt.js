@@ -1,6 +1,24 @@
 const { config } = require('../db/dbHandler');
 const eventHandler = require('./eventEmitters/config-event-handler')
-const { modifyInterval } = require('./new_message_cron')
+const { modifyInterval } = require('./new_message_cron');
+const { checkOpenAIKey } = require('./openai');
+
+module.exports.configPipes = {
+    newMessageInterval: {
+        recv: (value) => {
+            if (value < 15) {
+                return 15 * 60 * 1000
+            }
+            return value * 60 * 1000
+        },
+        send: (value) => {
+            return value / 60 / 1000
+        }
+    },
+    openai_key: {
+        validate: checkOpenAIKey
+    }
+}
 
 module.exports.applyDefault = function () {
     const default_config = {
@@ -20,6 +38,8 @@ eventHandler.on('configUpdated', (data) => {
         case 'newMessageInterval': handleIntervalUpdate(data.value)
     }
 })
+
+
 
 handleIntervalUpdate = (value) => {
     modifyInterval()

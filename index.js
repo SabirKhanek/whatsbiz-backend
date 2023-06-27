@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('./utils/config-mgmt').applyDefault()
-const storage_mount = (process.env.storage_mount && fs.existsSync(process.env.storage_mount)) ? process.env.storage_mount : '/mnt/storage'
+// const storage_mount = (process.env.storage_mount && fs.existsSync(process.env.storage_mount)) ? process.env.storage_mount : '/mnt/storage'
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
@@ -11,6 +11,7 @@ const apiRouter = require('./routes')
 const cors = require('cors')
 const db = require('./db/dbHandler');
 const morgan = require('morgan');
+const path = require('path');
 require('./utils/new_message_cron').initCronJob()
 
 if (process.env.NODE_ENV === 'production') {
@@ -30,12 +31,17 @@ if (process.env.NODE_ENV === 'production') {
 app.use(cors())
 app.use(express.json())
 app.use('/api', apiRouter)
-app.use('/auth', require('./routes/auth'))
-app.use('/', express.static('public'))
+app.use(express.static('public'));
+
+// Serve the index.html file for all routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 
 // Start the server
 const port = 3000; // Choose your desired port number
-http.listen(port, () => {
+http.listen(port, '0.0.0.0', () => {
     console.log(`Server listening on port ${port}`);
 });
 

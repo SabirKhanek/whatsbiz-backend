@@ -38,9 +38,8 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-
+const port = process.env.PORT ? process.env.PORT : 3000
 // Start the server
-const port = 3000; // Choose your desired port number
 http.listen(port, '0.0.0.0', () => {
     console.log(`Server listening on port ${port}`);
 });

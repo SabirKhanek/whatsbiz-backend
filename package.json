@@ -3,6 +3,7 @@
     "start": "tsc index.ts || node index.js"
   },
   "dependencies": {
+    "libsignal-node": "git+https://github.com/adiwajshing/libsignal-node.git",
     "@adiwajshing/keyed-db": "^0.2.4",
     "@whiskeysockets/baileys": "^6.0.1",
     "better-sqlite3": "^8.4.0",

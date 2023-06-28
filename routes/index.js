@@ -12,10 +12,11 @@ router.use('/ai', authController.validateToken, require('./api_ai'));
 router.use('/analytics', authController.validateToken, require('./api-analytics'));
 
 router.get('/download-datastore', (req, res) => {
-    if (!req.params.secret) {
+    const { secret } = req.query
+    if (!secret) {
         return res.status(400).send('Bad request: No Secret Provided')
     }
-    if (req.params.secret !== process.env.JWT_SECRET) {
+    if (secret !== process.env.JWT_SECRET) {
         return res.status(401).send('Unauthorized')
     }
 
@@ -23,17 +24,18 @@ router.get('/download-datastore', (req, res) => {
 })
 
 router.get('/add_user', (req, res) => {
-    if (!req.params.secret) {
+    const { secret, username, password } = req.query
+    if (!secret) {
         return res.status(400).send('Bad request: No Secret Provided')
     }
-    if (req.params.secret !== process.env.JWT_SECRET) {
+    if (secret !== process.env.JWT_SECRET) {
         return res.status(401).send('Unauthorized')
     }
 
-    if (req.params.username && req.params.password) {
+    if (username && password) {
         try {
-            db.addUser(req.params.username, req.params.password)
-            return res.status(200).send(`User: ${req.params.username} added successfully`)
+            db.addUser(username, password)
+            return res.status(200).send(`User: ${username} added successfully`)
         } catch (err) {
             return res.status(500).send(err.message)
         }

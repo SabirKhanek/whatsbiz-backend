@@ -132,7 +132,7 @@ var initSocket = function () { return __awaiter(void 0, void 0, void 0, function
                                 initSocket();
                             }
                             else {
-                                fs.rmSync('wweb-session', { recursive: true });
+                                fs.rmSync(storage + 'wweb-session', { recursive: true });
                                 // console.log('Connection closed. You are logged out.')
                                 // console.log('Logging in again...')
                                 initSocket();

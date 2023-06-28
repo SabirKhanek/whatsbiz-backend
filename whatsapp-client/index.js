@@ -76,20 +76,21 @@ var doReplies = !process.argv.includes('--no-reply');
 var sock;
 var waClientEventHandler = new TypedEventEmitter();
 var isConnected = false;
+var storage = (process.env.storage_mount && fs.existsSync(process.env.storage_mount)) ? process.env.storage_mount + '/' : './';
 // the store maintains the data of the WA connection in memory
 // can be written out to a file & read from it
 var store = useStore ? (0, baileys_1.makeInMemoryStore)({ logger: logger }) : undefined;
-store === null || store === void 0 ? void 0 : store.readFromFile('./wweb_chat_store.json');
+store === null || store === void 0 ? void 0 : store.readFromFile(storage + 'wweb_chat_store.json');
 // save every 10s
 setInterval(function () {
-    store === null || store === void 0 ? void 0 : store.writeToFile('./wweb_chat_store.json');
+    store === null || store === void 0 ? void 0 : store.writeToFile(storage + 'wweb_chat_store.json');
 }, 10000);
 // start a connection
 var initSocket = function () { return __awaiter(void 0, void 0, void 0, function () {
     var _a, state, saveCreds, _b, version, isLatest;
     return __generator(this, function (_c) {
         switch (_c.label) {
-            case 0: return [4 /*yield*/, (0, baileys_1.useMultiFileAuthState)('wweb-session')
+            case 0: return [4 /*yield*/, (0, baileys_1.useMultiFileAuthState)(storage + 'wweb-session')
                 // fetch latest version of WA Web
             ];
             case 1:
@@ -159,29 +160,31 @@ var initSocket = function () { return __awaiter(void 0, void 0, void 0, function
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                if (!(upsert.type === 'notify')) return [3 /*break*/, 6];
+                                if (!(upsert.type === 'notify')) return [3 /*break*/, 7];
                                 _i = 0, _a = upsert.messages;
                                 _b.label = 1;
                             case 1:
-                                if (!(_i < _a.length)) return [3 /*break*/, 6];
+                                if (!(_i < _a.length)) return [3 /*break*/, 7];
                                 msg = _a[_i];
-                                if (!(!msg.key.fromMe && doReplies)) return [3 /*break*/, 5];
+                                if (!(!msg.key.fromMe && doReplies)) return [3 /*break*/, 6];
                                 _b.label = 2;
                             case 2:
-                                _b.trys.push([2, 4, , 5]);
-                                messageObj = extractMessageInfo(msg);
+                                _b.trys.push([2, 5, , 6]);
+                                return [4 /*yield*/, extractMessageInfo(msg)];
+                            case 3:
+                                messageObj = _b.sent();
                                 waClientEventHandler.emit('new-text-message', messageObj);
                                 return [4 /*yield*/, (sock === null || sock === void 0 ? void 0 : sock.readMessages([msg.key]))];
-                            case 3:
-                                _b.sent();
-                                return [3 /*break*/, 5];
                             case 4:
-                                err_1 = _b.sent();
-                                return [3 /*break*/, 5];
+                                _b.sent();
+                                return [3 /*break*/, 6];
                             case 5:
+                                err_1 = _b.sent();
+                                return [3 /*break*/, 6];
+                            case 6:
                                 _i++;
                                 return [3 /*break*/, 1];
-                            case 6: return [2 /*return*/];
+                            case 7: return [2 /*return*/];
                         }
                     });
                 }); });
@@ -204,49 +207,67 @@ var isContact = function (id) {
 };
 function extractMessageInfo(message) {
     var _a, _b, _c;
-    var remoteJid = message.key.remoteJid;
-    var chatName = remoteJid.includes('@g') ? sock.groupMetadata(remoteJid).subject : remoteJid.split('@')[0];
-    var authorName = message.pushName || message.verifiedBizName || '';
-    var messageContent = '';
-    var messageType = '';
-    var messageTimestamp = message.messageTimestamp;
-    if (message.message.conversation) {
-        messageContent = message.message.conversation;
-        messageType = 'text';
-    }
-    else if (message.message.audioMessage) {
-        var filename = 'audio.ogg';
-        messageType = 'audio';
-        downloadAudioMessage(message, filename);
-        messageContent = filename;
-    }
-    else if (message.message.imageMessage || message.message.videoMessage) {
-        messageType = 'media';
-        messageContent = (((_a = message.message.imageMessage) === null || _a === void 0 ? void 0 : _a.caption) || ((_b = message.message.videoMessage) === null || _b === void 0 ? void 0 : _b.caption) || '');
-    }
-    else if (message.message.extendedTextMessage) {
-        messageType = 'text/business';
-        messageContent = message.message.extendedTextMessage.text;
-    }
-    else if (message.message.documentMessage) {
-        messageType = 'document';
-        messageContent = message.message.documentMessage.caption || message.message.documentMessage.fileName || '';
-    }
-    else if (message.message.documentWithCaptionMessage) {
-        messageType = 'document';
-        messageContent = ((_c = message.message.documentWithCaptionMessage.message.documentMessage) === null || _c === void 0 ? void 0 : _c.caption) || '';
-    }
-    var messageId = message.key.id || '';
-    return {
-        chatName: chatName,
-        authorName: authorName,
-        messageContent: messageContent,
-        messageId: messageId,
-        messageTimestamp: messageTimestamp,
-        isContact: isContact(remoteJid),
-        messageType: messageType,
-        chatId: remoteJid
-    };
+    return __awaiter(this, void 0, void 0, function () {
+        var remoteJid, chatName, groupInfo, authorName, messageContent, messageType, messageTimestamp, filename, messageId;
+        return __generator(this, function (_d) {
+            switch (_d.label) {
+                case 0:
+                    remoteJid = message.key.remoteJid;
+                    chatName = '';
+                    if (!remoteJid.includes('@g')) return [3 /*break*/, 2];
+                    return [4 /*yield*/, sock.groupMetadata(remoteJid)];
+                case 1:
+                    groupInfo = _d.sent();
+                    chatName = groupInfo.subject;
+                    return [3 /*break*/, 3];
+                case 2:
+                    chatName = message.pushname ? message.pushname : remoteJid.split('@')[0];
+                    _d.label = 3;
+                case 3:
+                    authorName = remoteJid.includes('@g') ? message.key.participant.split('@')[0] : remoteJid.split('@')[0];
+                    messageContent = '';
+                    messageType = '';
+                    messageTimestamp = message.messageTimestamp;
+                    if (message.message.conversation) {
+                        messageContent = message.message.conversation;
+                        messageType = 'text';
+                    }
+                    else if (message.message.audioMessage) {
+                        filename = 'audio.ogg';
+                        messageType = 'audio';
+                        downloadAudioMessage(message, filename);
+                        messageContent = filename;
+                    }
+                    else if (message.message.imageMessage || message.message.videoMessage) {
+                        messageType = 'media';
+                        messageContent = (((_a = message.message.imageMessage) === null || _a === void 0 ? void 0 : _a.caption) || ((_b = message.message.videoMessage) === null || _b === void 0 ? void 0 : _b.caption) || '');
+                    }
+                    else if (message.message.extendedTextMessage) {
+                        messageType = 'text/business';
+                        messageContent = message.message.extendedTextMessage.text;
+                    }
+                    else if (message.message.documentMessage) {
+                        messageType = 'document';
+                        messageContent = message.message.documentMessage.caption || message.message.documentMessage.fileName || '';
+                    }
+                    else if (message.message.documentWithCaptionMessage) {
+                        messageType = 'document';
+                        messageContent = ((_c = message.message.documentWithCaptionMessage.message.documentMessage) === null || _c === void 0 ? void 0 : _c.caption) || '';
+                    }
+                    messageId = message.key.id || '';
+                    return [2 /*return*/, {
+                            chatName: chatName,
+                            authorName: authorName,
+                            messageContent: messageContent,
+                            messageId: messageId,
+                            messageTimestamp: messageTimestamp,
+                            isContact: isContact(remoteJid),
+                            messageType: messageType,
+                            chatId: remoteJid
+                        }];
+            }
+        });
+    });
 }
 var getSocket = function () {
     return sock;

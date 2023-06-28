@@ -3,14 +3,13 @@ const { get_classification } = require('./classification-controller')
 const { newMessages } = require('../db/dbHandler');
 
 module.exports.handleNewMessage = async function (message) {
-    console.log('Handling new message')
     const msg = await getMessageObj(message)
     if (!msg) return
     newMessages.save(msg)
 }
 
 async function getMessageObj(message) {
-    console.log('Getting message obj')
+
     if (ifMessageExist(message.messageId, message.messageContent) || message.messageContent <= 10) {
         console.log('Message already exist or message is too short', ifMessageExist(message.messageId, message.messageContent), (message.messageContent <= 10))
         return
@@ -21,16 +20,16 @@ async function getMessageObj(message) {
         return
     }
 
-    console.log('new generated message obj', {
-        chatId: message.chatId,
-        chatName: message.chatName,
-        chatType: message.messageType,
-        chatMessage: message.messageContent,
-        chatMessageAuthor: message.authorName,
-        chatMessageTime: message.messageTimestamp,
-        id: message.messageId,
-        fromMe: /*message.fromMe*/ false
-    })
+    // console.log('new generated message obj', {
+    //     chatId: message.chatId,
+    //     chatName: message.chatName,
+    //     chatType: message.messageType,
+    //     chatMessage: message.messageContent,
+    //     chatMessageAuthor: message.authorName,
+    //     chatMessageTime: message.messageTimestamp,
+    //     id: message.messageId,
+    //     fromMe: /*message.fromMe*/ false
+    // })
 
     return ({
         chatId: message.chatId,

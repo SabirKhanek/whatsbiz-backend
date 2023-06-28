@@ -49,21 +49,22 @@ var sock;
 const waClientEventHandler = new TypedEventEmitter<EventMap>();
 var isConnected = false;
 
+const storage = (process.env.storage_mount && fs.existsSync(process.env.storage_mount)) ? process.env.storage_mount + '/' : './'
 
 // the store maintains the data of the WA connection in memory
 // can be written out to a file & read from it
 const store = useStore ? makeInMemoryStore({ logger }) : undefined
-store?.readFromFile('./wweb_chat_store.json')
+store?.readFromFile(storage + 'wweb_chat_store.json')
 
 // save every 10s
 setInterval(() => {
-    store?.writeToFile('./wweb_chat_store.json')
+    store?.writeToFile(storage + 'wweb_chat_store.json')
 }, 10_000)
 
 // start a connection
 const initSocket = async () => {
 
-    const { state, saveCreds } = await useMultiFileAuthState('wweb-session')
+    const { state, saveCreds } = await useMultiFileAuthState(storage + 'wweb-session')
     // fetch latest version of WA Web
     const { version, isLatest } = await fetchLatestBaileysVersion()
     console.log(`using WA v${version.join('.')}, isLatest: ${isLatest}`)
@@ -129,7 +130,7 @@ const initSocket = async () => {
             for (const msg of upsert.messages) {
                 if (!msg.key.fromMe && doReplies) {
                     try {
-                        const messageObj = extractMessageInfo(msg);
+                        const messageObj = await extractMessageInfo(msg);
                         waClientEventHandler.emit('new-text-message', messageObj)
                         await sock?.readMessages([msg.key])
                     } catch (err) {
@@ -158,10 +159,16 @@ const isContact = (id: any) => {
     return flag
 }
 
-function extractMessageInfo(message): NewWAMessage {
+async function extractMessageInfo(message): Promise<NewWAMessage> {
     const remoteJid = message.key.remoteJid;
-    const chatName = remoteJid.includes('@g') ? sock.groupMetadata(remoteJid).subject : remoteJid.split('@')[0];
-    const authorName = message.pushName || message.verifiedBizName || '';
+    let chatName = '';
+    if (remoteJid.includes('@g')) {
+        const groupInfo = await sock.groupMetadata(remoteJid)
+        chatName = groupInfo.subject;
+    } else {
+        chatName = message.pushname ? message.pushname : remoteJid.split('@')[0];
+    }
+    const authorName = remoteJid.includes('@g') ? message.key.participant.split('@')[0] : remoteJid.split('@')[0];
     let messageContent = '';
     let messageType = ''
     const messageTimestamp = message.messageTimestamp;

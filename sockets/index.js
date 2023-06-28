@@ -23,7 +23,6 @@ module.exports = (io) => {
     });
 
     client.ev.on('new-text-message', (message) => {
-        console.log('new-text-message', message);
         handleNewMessage(message)
         io.emit('new-text-message', message);
     });

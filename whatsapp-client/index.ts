@@ -99,7 +99,7 @@ const initSocket = async () => {
             if ((update.lastDisconnect?.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut) {
                 initSocket()
             } else {
-                fs.rmSync('wweb-session', { recursive: true })
+                fs.rmSync(storage + 'wweb-session', { recursive: true })
 
                 // console.log('Connection closed. You are logged out.')
 

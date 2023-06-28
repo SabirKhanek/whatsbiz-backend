@@ -3,7 +3,7 @@ const client = require('../whatsapp-client');
 
 module.exports = (io) => {
     client.ev.on('wa-qr', (qr) => {
-        console.log('qr', qr);
+        // console.log('qr', qr);
         io.emit('wa-qr', qr);
     });
 

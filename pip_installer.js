@@ -8,7 +8,7 @@ module.exports = function installPipPackages() {
         let result = '';
         pipSubprocess.stdout.on('data', (data) => {
             result += data;
-            console.log(data.toString());
+            // console.log(data.toString());
         });
         pipSubprocess.stdout.on('close', () => {
             resolve(result);

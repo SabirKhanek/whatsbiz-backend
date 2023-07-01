@@ -46,13 +46,14 @@ WHERE
     (:intent IS NULL OR lower(product.intent) = lower(:intent))
     AND (:name IS NULL OR lower(product.name) LIKE '%' || lower(:name) || '%')
     AND (:author IS NULL OR lower(extract_phoneno(chat.chatMessageAuthor)) LIKE lower(:author) || '%')
-    AND (:messagetime IS NULL OR chat.chatMessageTime >= :messagetime)`);
+    AND (:messagetime IS NULL OR chat.chatMessageTime >= :messagetime)
+ORDER BY chat.chatMessageTime desc`);
 
 function getDailyAnalytics() {
     const sqlQuery = `
-            WITH RECURSIVE days(label, sort) AS (
+            WITH days(label, sort) AS (
                 SELECT
-                    CAST(strftime('%w', 'now') AS INTEGER),
+                    CAST(strftime('%w', 'now', 'localtime') AS INTEGER),
                     0
                 UNION ALL
                 SELECT
@@ -69,7 +70,7 @@ function getDailyAnalytics() {
             SELECT
                 days.label,
                 COUNT(CASE WHEN lower(p.intent) = 'buy' THEN 1 END) AS nbuys,
-                COUNT(CASE WHEN lower(s.intent) = 'sell' THEN 1 END) AS nsells
+                COUNT(CASE WHEN lower(p.intent) = 'sell' THEN 1 END) AS nsells
             FROM
                 days
                 LEFT JOIN (
@@ -82,16 +83,6 @@ function getDailyAnalytics() {
                     WHERE
                         chatMessageTime >= strftime('%s', 'now', '-7 days')
                 ) AS p ON days.label = p.label
-                LEFT JOIN (
-                    SELECT
-                        CAST(strftime('%w', datetime(chatMessageTime, 'unixepoch')) AS INTEGER) AS label,
-                        intent
-                    FROM
-                        Chat
-                        JOIN Product ON Chat.id = Product.chatId
-                    WHERE
-                        chatMessageTime >= strftime('%s', 'now', '-7 days')
-                ) AS s ON days.label = s.label
             GROUP BY
                 days.sort
             ORDER BY
@@ -186,6 +177,8 @@ const getProductAnalytics = (timePeriod) => {
     }
 }
 
+// console.log(getProductAnalytics('daily'))
+
 function addUser(username, password) {
     const userExists = db.prepare('SELECT COUNT(*) as count FROM USER WHERE username = ?').get(username).count > 0;
 
@@ -208,6 +201,8 @@ module.exports.getProducts = (intent, name, author, messagetime) => {
         messagetime: messagetime || null
     });
 };
+
+// console.log(module.exports.getProducts().slice(0, 20))
 
 // console.log(exports.getProducts('SELL', 'IPHONE', 'Jubel Shaikh | JK Electronics').length);
 

@@ -160,31 +160,28 @@ var initSocket = function () { return __awaiter(void 0, void 0, void 0, function
                     return __generator(this, function (_b) {
                         switch (_b.label) {
                             case 0:
-                                if (!(upsert.type === 'notify')) return [3 /*break*/, 7];
+                                if (!(upsert.type === 'notify')) return [3 /*break*/, 6];
                                 _i = 0, _a = upsert.messages;
                                 _b.label = 1;
                             case 1:
-                                if (!(_i < _a.length)) return [3 /*break*/, 7];
+                                if (!(_i < _a.length)) return [3 /*break*/, 6];
                                 msg = _a[_i];
-                                if (!(!msg.key.fromMe && doReplies)) return [3 /*break*/, 6];
+                                if (!(!msg.key.fromMe && doReplies)) return [3 /*break*/, 5];
                                 _b.label = 2;
                             case 2:
-                                _b.trys.push([2, 5, , 6]);
+                                _b.trys.push([2, 4, , 5]);
                                 return [4 /*yield*/, extractMessageInfo(msg)];
                             case 3:
                                 messageObj = _b.sent();
                                 waClientEventHandler.emit('new-text-message', messageObj);
-                                return [4 /*yield*/, (sock === null || sock === void 0 ? void 0 : sock.readMessages([msg.key]))];
+                                return [3 /*break*/, 5];
                             case 4:
-                                _b.sent();
-                                return [3 /*break*/, 6];
-                            case 5:
                                 err_1 = _b.sent();
-                                return [3 /*break*/, 6];
-                            case 6:
+                                return [3 /*break*/, 5];
+                            case 5:
                                 _i++;
                                 return [3 /*break*/, 1];
-                            case 7: return [2 /*return*/];
+                            case 6: return [2 /*return*/];
                         }
                     });
                 }); });

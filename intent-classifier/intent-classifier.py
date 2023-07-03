@@ -13,53 +13,58 @@ import json
 import os
 import sys
 
+
 def train_model():
-    filename = 'buy_sell_dataset.csv'
+    filename = "buy_sell_dataset.csv"
     if not os.path.isfile(filename):
         print(f"Error: '{filename}' file not found.")
         sys.exit(1)
 
-    nltk.download('punkt', quiet=True)
-    nltk.download('wordnet',quiet=True)
-    nltk.download('stopwords',quiet=True)
+    nltk.download("punkt", quiet=True)
+    nltk.download("wordnet", quiet=True)
+    nltk.download("stopwords", quiet=True)
 
     # Load the data
-    data = pd.read_csv('buy_sell_dataset.csv')
+    data = pd.read_csv("buy_sell_dataset.csv")
 
     # Remove unnecessary characters
-    data['message'] = data['message'].str.replace('[^\w\s]','')
+    data["message"] = data["message"].str.replace("[^\w\s]", "")
 
     # Convert to lowercase
-    data['message'] = data['message'].str.lower()
+    data["message"] = data["message"].str.lower()
 
     # Tokenization
-    data['tokens'] = data['message'].apply(word_tokenize)
+    data["tokens"] = data["message"].apply(word_tokenize)
 
     # Remove stop words
-    stop_words = set(stopwords.words('english'))
-    data['tokens'] = data['tokens'].apply(lambda x: [item for item in x if item not in stop_words])
+    stop_words = set(stopwords.words("english"))
+    data["tokens"] = data["tokens"].apply(
+        lambda x: [item for item in x if item not in stop_words]
+    )
 
     # Lemmatization
     lemmatizer = WordNetLemmatizer()
-    data['tokens'] = data['tokens'].apply(lambda x: [lemmatizer.lemmatize(item) for item in x])
+    data["tokens"] = data["tokens"].apply(
+        lambda x: [lemmatizer.lemmatize(item) for item in x]
+    )
 
     # Encoding Labels
-    data['intent'] = data['intent'].map({'buy': 1, 'sell': 0, 'nothing': 2})
+    data["intent"] = data["intent"].map({"buy": 1, "sell": 0, "nothing": 2})
 
     # Check for missing values in 'intent' column
-    null_values = data['intent'].isnull()
+    null_values = data["intent"].isnull()
     if null_values.any():
         # print("The following rows have missing 'intent' values:")
         # print(data[null_values])
         # Impute missing values with most frequent value
-        data['intent'].fillna(data['intent'].mode()[0], inplace=True)
+        data["intent"].fillna(data["intent"].mode()[0], inplace=True)
     # else:
-        # print("No missing values found in 'intent' column.")
-
-
+    # print("No missing values found in 'intent' column.")
 
     # Split the data into training and testing sets
-    X_train, X_test, y_train, y_test = train_test_split(data['message'], data['intent'], test_size=0.02)
+    X_train, X_test, y_train, y_test = train_test_split(
+        data["message"], data["intent"], test_size=0.02
+    )
 
     # Vectorize the data
     vectorizer = TfidfVectorizer()
@@ -75,12 +80,14 @@ def train_model():
     # print(f"Accuracy: {accuracy}")
     # Save the trained model to disk
     import joblib
-    joblib.dump(clf, 'model.pkl')
+
+    joblib.dump(clf, "model.pkl")
 
     # Save the vectorizer to disk
-    joblib.dump(vectorizer, 'vectorizer.pkl')
+    joblib.dump(vectorizer, "vectorizer.pkl")
 
     return [clf, vectorizer]
+
 
 def get_prediction():
     # filenames = ['model.pkl', 'vectorizer.pkl']
@@ -92,8 +99,8 @@ def get_prediction():
     clf = 0
     vectorizer = 0
     try:
-        clf = joblib.load('model.pkl')
-        vectorizer = joblib.load('vectorizer.pkl')
+        clf = joblib.load("model.pkl")
+        vectorizer = joblib.load("vectorizer.pkl")
     except:
         training = train_model()
         clf = training[0]
@@ -101,11 +108,11 @@ def get_prediction():
 
     # Load the messages from input file
     messages = []
-    with open(sys.argv[2], 'r', encoding='utf-8', errors='ignore') as f:
+    with open(sys.argv[2], "r", encoding="utf-8", errors="ignore") as f:
         for line in f:
             line = line.strip()
             messages.append(line)
-        
+
     # Vectorize the message
     message_vec = vectorizer.transform(messages)
 
@@ -114,22 +121,69 @@ def get_prediction():
 
     output = []
 
+    sell_keywords = [
+        "wts",
+        "sell",
+        "want to sell",
+        "want sell",
+        "wanting to sell",
+        "wanting sell",
+        "wanna sell",
+        "wanna to sell",
+        "wanna sell",
+        "looking to sell",
+        "looking sell",
+        "looking for sell",
+        "looking for to sell",
+        "looking for sell",
+        "looking for to sell",
+        "selling",
+        "sellin",
+        "stock available",
+        "clearing stock",
+        "stock clearing",
+    ]
+
+    buy_keywords = [
+        "wtb",
+        "buy",
+        "want to buy",
+        "want buy",
+        "wanting to buy",
+        "wanting buy",
+        "wanna buy",
+        "wanna to buy",
+        "wanna buy",
+        "looking to buy",
+        "looking buy",
+        "looking for buy",
+        "looking for to buy",
+        "looking for buy",
+        "looking for to buy",
+    ]
+
     # Print the results
-    for prediction in predictions:
-        if prediction == 1:
+
+    for message, prediction in zip(messages, predictions):
+        if any(keyword.lower() in message.lower() for keyword in buy_keywords):
             output.append("Buy")
-        elif prediction == 0:
-            output.append('Sell')
+        elif any(keyword.lower() in message.lower() for keyword in sell_keywords):
+            output.append("Sell")
         else:
-            output.append("Nothing")
+            if prediction == 1:
+                output.append("Buy")
+            elif prediction == 0:
+                output.append("Sell")
+            else:
+                output.append("Nothing")
 
     print(output)
 
 
-if __name__ == '__main__':
-    if sys.argv[1] == 'train':
+if __name__ == "__main__":
+    if sys.argv[1] == "train":
         train_model()
-    elif sys.argv[1] == 'predict':
+    elif sys.argv[1] == "predict":
         get_prediction()
     else:
         print("Invalid argument. Please use 'train' or 'predict'.")

@@ -11,12 +11,12 @@ module.exports.handleNewMessage = async function (message) {
 async function getMessageObj(message) {
 
     if (ifMessageExist(message.messageId, message.messageContent) || message.messageContent <= 10) {
-        console.log('Message already exist or message is too short', ifMessageExist(message.messageId, message.messageContent), (message.messageContent <= 10))
+        // console.log('Message already exist or message is too short', ifMessageExist(message.messageId, message.messageContent), (message.messageContent <= 10))
         return
     }
 
     if (isClassifed(message.messageContent)) {
-        console.log('Message already classified')
+        // console.log('Message already classified')
         return
     }
 

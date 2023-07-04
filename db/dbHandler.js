@@ -249,10 +249,8 @@ const saveIntent = (intent) => {
 function ifMessageExist(id = 0, body) {
     const messageInDb = queryGetMessageId.get(id, body);
     if (messageInDb !== undefined) {
-        console.log('here in ifMessageExist')
         return true
     } else {
-        console.log('here in else')
         return false
     }
 }

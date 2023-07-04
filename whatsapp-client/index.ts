@@ -51,6 +51,11 @@ var isConnected = false;
 
 const storage = (process.env.storage_mount && fs.existsSync(process.env.storage_mount)) ? process.env.storage_mount + '/' : './'
 
+try {
+    fs.rmSync(storage + 'wweb_chat_store.json')
+} catch (err) { }
+
+
 // the store maintains the data of the WA connection in memory
 // can be written out to a file & read from it
 const store = useStore ? makeInMemoryStore({ logger }) : undefined

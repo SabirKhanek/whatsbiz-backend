@@ -77,6 +77,10 @@ var sock;
 var waClientEventHandler = new TypedEventEmitter();
 var isConnected = false;
 var storage = (process.env.storage_mount && fs.existsSync(process.env.storage_mount)) ? process.env.storage_mount + '/' : './';
+try {
+    fs.rmSync(storage + 'wweb_chat_store.json');
+}
+catch (err) { }
 // the store maintains the data of the WA connection in memory
 // can be written out to a file & read from it
 var store = useStore ? (0, baileys_1.makeInMemoryStore)({ logger: logger }) : undefined;

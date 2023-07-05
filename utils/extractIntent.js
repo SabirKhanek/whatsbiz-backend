@@ -3,13 +3,14 @@ const { getIntentAnalysisCmd: getCommand } = require('./prompts')
 
 async function extractIntent(request) {
     request = request.replace(/\n\s+/g, '\n');
+    request = request.replace(/[^\w\s.,?!'"():;/[\]]/g, '').trim();
     request = getCommand(request)
     request = { "role": "user", "content": request }
     try {
         const resp = await getOpenAI().createChatCompletion({
             model: "gpt-3.5-turbo",
             temperature: 0.1,
-            messages: [{ 'role': 'system', 'content': ("Implement a message processing system that can detect whether a user is listing products for buy or sell in their messages. The system should only process the given text and not request any additional information. If the message contains products listed for buy or sell, the system should output the list of products along with the relevant action (Buy/Sell). If there are no products detected, output 'CODE400'.") }, request]
+            messages: [{ 'role': 'system', 'content': ("Implement a message processing system that can detect whether a user is listing products for buy or sell in their messages. The system should only process the given text and not request any additional information. If the message contains products listed for buy (WTB) or sell(WTS), the system should output the list of products along with the relevant action (Buy/Sell). If there are no products detected, output 'CODE400'.") }, request]
         })
 
         if (resp.data.choices[0].message.content) {
@@ -24,15 +25,6 @@ async function extractIntent(request) {
     }
 }
 
-// getOpenAI().createChatCompletion({
-//     model: "gpt-3.5-turbo",
-//     temperature: 0.1,
-//     messages: [{ role: 'user', content: 'Hi' }]
-// }).then(resp => {
-//     console.log(resp.data.choices[0].message.content)
-// }).catch(err => {
-//     console.log(err)
-// })
 
 // extractIntent(`Selling Ready Stock*	
 // Brand New / Non-active

@@ -123,7 +123,6 @@ def get_prediction():
 
     sell_keywords = [
         "wts",
-        "sell",
         "want to sell",
         "want sell",
         "wanting to sell",
@@ -137,8 +136,6 @@ def get_prediction():
         "looking for to sell",
         "looking for sell",
         "looking for to sell",
-        "selling",
-        "sellin",
         "stock available",
         "clearing stock",
         "stock clearing",
@@ -146,7 +143,6 @@ def get_prediction():
 
     buy_keywords = [
         "wtb",
-        "buy",
         "want to buy",
         "want buy",
         "wanting to buy",

@@ -1,4 +1,4 @@
-const { ifMessageExist, isClassifed } = require('../db/dbHandler');
+const { ifMessageExist, isClassifed, ifNewMessageExist } = require('../db/dbHandler');
 const { get_classification } = require('./classification-controller')
 const { newMessages } = require('../db/dbHandler');
 
@@ -9,6 +9,16 @@ module.exports.handleNewMessage = async function (message) {
 }
 
 async function getMessageObj(message) {
+    const obj = {
+        chatId: message.chatId,
+        chatName: message.chatName,
+        chatType: message.messageType,
+        chatMessage: message.messageContent,
+        chatMessageAuthor: message.authorName,
+        chatMessageTime: message.messageTimestamp,
+        id: message.messageId,
+        fromMe: /*message.fromMe*/ false
+    }
 
     if (ifMessageExist(message.messageId, message.messageContent) || message.messageContent <= 10) {
         // console.log('Message already exist or message is too short', ifMessageExist(message.messageId, message.messageContent), (message.messageContent <= 10))
@@ -17,6 +27,10 @@ async function getMessageObj(message) {
 
     if (isClassifed(message.messageContent)) {
         // console.log('Message already classified')
+        return
+    }
+
+    if (ifNewMessageExist(message.messageContent)) {
         return
     }
 
@@ -31,16 +45,7 @@ async function getMessageObj(message) {
     //     fromMe: /*message.fromMe*/ false
     // })
 
-    return ({
-        chatId: message.chatId,
-        chatName: message.chatName,
-        chatType: message.messageType,
-        chatMessage: message.messageContent,
-        chatMessageAuthor: message.authorName,
-        chatMessageTime: message.messageTimestamp,
-        id: message.messageId,
-        fromMe: /*message.fromMe*/ false
-    })
+    return obj
 }
 
 module.exports.getBatchClassifiedMessages = async function getBatchClassifiedMessages(messages) {

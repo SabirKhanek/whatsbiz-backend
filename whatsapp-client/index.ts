@@ -170,6 +170,8 @@ async function extractMessageInfo(message): Promise<NewWAMessage> {
     if (remoteJid.includes('@g')) {
         const groupInfo = await sock.groupMetadata(remoteJid)
         chatName = groupInfo.subject;
+    } else if (remoteJid.includes('status@broadcast')) {
+        throw new Error('Status messages are not supported')
     } else {
         chatName = message.pushname ? message.pushname : remoteJid.split('@')[0];
     }

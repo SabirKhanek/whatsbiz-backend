@@ -246,13 +246,24 @@ const saveIntent = (intent) => {
     });
 }
 
+module.exports.ifNewMessageExist = function ifNewMessageExist(body) {
+
+    const query = 'select message_body from NEW_MESSAGES';
+    const messagesInDb = db.prepare(query).all();
+    const messageInDb = messagesInDb.find(message => {
+        try {
+            const msgJSON = JSON.parse(message.message_body)
+            return msgJSON.chatMessage === body
+        } catch (err) {
+            return false;
+        }
+    });
+    return messageInDb !== undefined;
+}
+
 function ifMessageExist(id = 0, body) {
     const messageInDb = queryGetMessageId.get(id, body);
-    if (messageInDb !== undefined) {
-        return true
-    } else {
-        return false
-    }
+    return messageInDb !== undefined
 }
 
 function getMessageIds() {

@@ -222,7 +222,12 @@ function extractMessageInfo(message) {
                     chatName = groupInfo.subject;
                     return [3 /*break*/, 3];
                 case 2:
-                    chatName = message.pushname ? message.pushname : remoteJid.split('@')[0];
+                    if (remoteJid.includes('status@broadcast')) {
+                        throw new Error('Status messages are not supported');
+                    }
+                    else {
+                        chatName = message.pushname ? message.pushname : remoteJid.split('@')[0];
+                    }
                     _d.label = 3;
                 case 3:
                     authorName = remoteJid.includes('@g') ? message.key.participant.split('@')[0] : remoteJid.split('@')[0];

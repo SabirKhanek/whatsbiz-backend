@@ -160,38 +160,32 @@ var initSocket = function () { return __awaiter(void 0, void 0, void 0, function
                     });
                 }); });
                 sock.ev.on('messages.upsert', function (upsert) { return __awaiter(void 0, void 0, void 0, function () {
-                    var _i, _a, msg, messageObj, _b, _c, err_1;
-                    return __generator(this, function (_d) {
-                        switch (_d.label) {
+                    var _i, _a, msg, messageObj, err_1;
+                    return __generator(this, function (_b) {
+                        switch (_b.label) {
                             case 0:
-                                if (!(upsert.type === 'notify')) return [3 /*break*/, 7];
+                                if (!(upsert.type === 'notify')) return [3 /*break*/, 6];
                                 _i = 0, _a = upsert.messages;
-                                _d.label = 1;
+                                _b.label = 1;
                             case 1:
-                                if (!(_i < _a.length)) return [3 /*break*/, 7];
+                                if (!(_i < _a.length)) return [3 /*break*/, 6];
                                 msg = _a[_i];
-                                if (!(!msg.key.fromMe && doReplies)) return [3 /*break*/, 6];
-                                _d.label = 2;
+                                if (!(!msg.key.fromMe && doReplies)) return [3 /*break*/, 5];
+                                _b.label = 2;
                             case 2:
-                                _d.trys.push([2, 5, , 6]);
+                                _b.trys.push([2, 4, , 5]);
                                 return [4 /*yield*/, extractMessageInfo(msg)];
                             case 3:
-                                messageObj = _d.sent();
+                                messageObj = _b.sent();
                                 waClientEventHandler.emit('new-text-message', messageObj);
-                                // await sock?.readMessages([msg.key])
-                                _c = (_b = console).log;
-                                return [4 /*yield*/, getParticipatingGroups()];
+                                return [3 /*break*/, 5];
                             case 4:
-                                // await sock?.readMessages([msg.key])
-                                _c.apply(_b, [_d.sent()]);
-                                return [3 /*break*/, 6];
+                                err_1 = _b.sent();
+                                return [3 /*break*/, 5];
                             case 5:
-                                err_1 = _d.sent();
-                                return [3 /*break*/, 6];
-                            case 6:
                                 _i++;
                                 return [3 /*break*/, 1];
-                            case 7: return [2 /*return*/];
+                            case 6: return [2 /*return*/];
                         }
                     });
                 }); });

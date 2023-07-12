@@ -1,5 +1,6 @@
 const { addGroupToCollection, deleteCollection, getGroupCollections, getGroupsInCollection, getGroupsNotInCollection, newCollection, removeGroupFromCollection, renameCollection, getGroupCollection } = require('../../../db/controllers/whatsapp/groups')
 const joi = require('joi')
+const { recvGroups } = require('../groups')
 
 exports.newGroupCollection = (req, res) => {
     const { name } = req.body
@@ -49,7 +50,7 @@ exports.getGroupCollections = (req, res) => {
 }
 
 
-exports.getGroupsInCollection = (req, res) => {
+exports.getGroupsInCollection = async (req, res) => {
     const { collectionId } = req.query
     if (!collectionId) return res.status(400).send({ result: 'error', message: 'No collection id provided' })
     try {
@@ -60,10 +61,11 @@ exports.getGroupsInCollection = (req, res) => {
     }
 }
 
-exports.getGroupsNotInCollection = (req, res) => {
+exports.getGroupsNotInCollection = async (req, res) => {
     const { collectionId } = req.query
     if (!collectionId) return res.status(400).send({ result: 'error', message: 'No collection id provided' })
     try {
+        const refreshGroup = await recvGroups()
         const groups = getGroupsNotInCollection(collectionId)
         res.send(groups)
     } catch (err) {

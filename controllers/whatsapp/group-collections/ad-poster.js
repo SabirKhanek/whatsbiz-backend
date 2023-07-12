@@ -25,15 +25,6 @@ exports.postAd = async (req, res) => {
 
     const { adText, adImage, collectionIds } = req.body;
 
-    // Refresh groups metadata
-    try {
-        const groups = await waClient.getParticipatingGroups()
-        dbController.updateGroupsMetadata(groups)
-    } catch (err) {
-        console.log(err)
-        return res.status(500).send({ error: err })
-    }
-
     // Get groups in collections
     const groupIds = []
 

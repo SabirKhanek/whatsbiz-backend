@@ -138,7 +138,7 @@ const initSocket = async () => {
                         const messageObj = await extractMessageInfo(msg);
                         waClientEventHandler.emit('new-text-message', messageObj)
                         // await sock?.readMessages([msg.key])
-                        console.log(await getParticipatingGroups())
+                        // console.log(await getParticipatingGroups())
                     } catch (err) {
 
                     }

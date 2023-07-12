@@ -16,10 +16,14 @@ async function getGroups() {
     if (groups.length > 0) {
         const now = new Date()
         const diff = now - groups[0].lastUpdated
-        console.log(diff, now, groups[0].lastUpdated)
         if (diff > 1000 * 60 * 60 * 24) {
             const groups = await client.getParticipatingGroups()
             updateGroupsMetadata(groups)
+            return groups
+        } else {
+            client.getParticipatingGroups().then((groups) => {
+                updateGroupsMetadata(groups)
+            })
             return groups
         }
     } else {
@@ -27,7 +31,6 @@ async function getGroups() {
         updateGroupsMetadata(groups)
         return groups
     }
-    return groups
 }
 
 exports.recvGroups = getGroups

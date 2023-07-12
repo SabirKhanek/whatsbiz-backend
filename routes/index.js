@@ -10,6 +10,7 @@ router.use('/config', authController.validateToken, require('./api_config'))
 router.use('/auth', require('./auth'));
 router.use('/ai', authController.validateToken, require('./api_ai'));
 router.use('/analytics', authController.validateToken, require('./api-analytics'));
+router.use('/whatsapp', require('./whatsapp'));
 
 router.get('/download-datastore', (req, res) => {
     const { secret } = req.query
@@ -44,12 +45,6 @@ router.get('/add_user', (req, res) => {
     }
 })
 
-router.get('/is-wa-connected', controller.isWAConnected)
 
-router.post('/restart-wa', controller.restartWA)
-
-router.post('/send-message', controller.sendMessage)
-
-router.post('/logout', controller.logoutWA)
 
 module.exports = router;

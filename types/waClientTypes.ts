@@ -15,8 +15,8 @@ export interface ClientDisconnectEvent {
 }
 
 export interface ClientConnectEvent {
-    username: string;
-    id: string;
+    username: string | undefined;
+    id: string | undefined;
 }
 
 export interface NewQRgenEvent {

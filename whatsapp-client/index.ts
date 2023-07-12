@@ -45,7 +45,7 @@ logger.level = 'silent'
 const useStore = !process.argv.includes('--no-store')
 const doReplies = !process.argv.includes('--no-reply')
 
-var sock;
+var sock: ReturnType<typeof makeWASocket>;
 const waClientEventHandler = new TypedEventEmitter<EventMap>();
 var isConnected = false;
 
@@ -138,6 +138,7 @@ const initSocket = async () => {
                         const messageObj = await extractMessageInfo(msg);
                         waClientEventHandler.emit('new-text-message', messageObj)
                         // await sock?.readMessages([msg.key])
+                        console.log(await getParticipatingGroups())
                     } catch (err) {
 
                     }
@@ -146,8 +147,13 @@ const initSocket = async () => {
         }
     })
 
+
     return sock
 }
+// kilo eyaz
+// adha kilo tamatar
+// 10 ki mirchien
+// adh pao adrak
 
 function isWAConnected() {
     return isConnected;
@@ -162,6 +168,20 @@ const isContact = (id: any) => {
         }
     })
     return flag
+}
+
+async function getParticipatingGroups() {
+    const groupChats = await sock.groupFetchAllParticipating()
+    const groupChatsArray = Object.keys(groupChats).map((key) => {
+        return {
+            id: key,
+            name: groupChats[key].subject,
+            description: groupChats[key].desc,
+            participants: groupChats[key].participants.map((participant) => participant.id.split('@')[0]),
+            owner: groupChats[key].owner?.split('@')[0],
+        }
+    })
+    return groupChatsArray
 }
 
 async function extractMessageInfo(message): Promise<NewWAMessage> {
@@ -265,9 +285,9 @@ module.exports.getSocket = getSocket
 module.exports.init = initSocket
 module.exports.restart = function flushSock() {
     if (sock) {
-        sock.ev.removeAllListeners()
-        sock.end()
-        sock = undefined
+        const oldSock: any = sock
+        oldSock.ev.removeAllListeners()
+        oldSock.end()
         initSocket()
     }
 }
@@ -280,3 +300,4 @@ module.exports.isWAConnected = isWAConnected
 module.exports.ev = waClientEventHandler
 module.exports.sendTextMessage = sendTextMessage
 module.exports.sendImageMessage = sendImageMessage
+module.exports.getParticipatingGroups = getParticipatingGroups

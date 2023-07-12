@@ -70,3 +70,65 @@ Content-Type: application/json
     "username":"user",
     "password": "anypass"
 }
+
+### get groups
+GET http://localhost:3000/api/whatsapp/groups
+
+### new collection
+POST http://localhost:3000/api/whatsapp/group-collections HTTP/1.1
+Content-Type: application/json
+
+{
+    "name":"test2"
+}
+
+### get group collections
+GET http://localhost:3000/api/whatsapp/group-collections
+
+
+### rename collection
+PUT http://localhost:3000/api/whatsapp/group-collections HTTP/1.1
+Content-Type: application/json
+
+{
+    "collectionId":3,
+    "newName":"test4"
+}
+
+### delete collection
+DELETE http://localhost:3000/api/whatsapp/group-collections?collectionId=3
+Content-Type: application/json
+
+{
+    "collectionId":3
+}
+
+
+
+### add group to collection
+POST http://localhost:3000/api/whatsapp/group-collections/groups HTTP/1.1
+Content-Type: application/json
+
+{
+    "collectionId":2,
+    "groupIds":[
+        "120363144114387125@g.us",
+        "120363162096958727@g.us",
+        "120363142734141560@g.us",
+        "120363162723246463@g.us",
+        "120363162431563498@g.us",
+        "anygroup"
+    ]
+}
+
+### remove group from collection
+DELETE http://localhost:3000/api/whatsapp/group-collections/groups?collectionId=2&groupId=120363144114387125@g.us
+
+
+### get groups in collection
+GET http://localhost:3000/api/whatsapp/group-collections/groups?collectionId=2
+Content-Type: application/json
+
+### get groups not in collection
+GET http://localhost:3000/api/whatsapp/group-collections/groups-not-in?collectionId=2
+Content-Type: application/json

@@ -160,32 +160,38 @@ var initSocket = function () { return __awaiter(void 0, void 0, void 0, function
                     });
                 }); });
                 sock.ev.on('messages.upsert', function (upsert) { return __awaiter(void 0, void 0, void 0, function () {
-                    var _i, _a, msg, messageObj, err_1;
-                    return __generator(this, function (_b) {
-                        switch (_b.label) {
+                    var _i, _a, msg, messageObj, _b, _c, err_1;
+                    return __generator(this, function (_d) {
+                        switch (_d.label) {
                             case 0:
-                                if (!(upsert.type === 'notify')) return [3 /*break*/, 6];
+                                if (!(upsert.type === 'notify')) return [3 /*break*/, 7];
                                 _i = 0, _a = upsert.messages;
-                                _b.label = 1;
+                                _d.label = 1;
                             case 1:
-                                if (!(_i < _a.length)) return [3 /*break*/, 6];
+                                if (!(_i < _a.length)) return [3 /*break*/, 7];
                                 msg = _a[_i];
-                                if (!(!msg.key.fromMe && doReplies)) return [3 /*break*/, 5];
-                                _b.label = 2;
+                                if (!(!msg.key.fromMe && doReplies)) return [3 /*break*/, 6];
+                                _d.label = 2;
                             case 2:
-                                _b.trys.push([2, 4, , 5]);
+                                _d.trys.push([2, 5, , 6]);
                                 return [4 /*yield*/, extractMessageInfo(msg)];
                             case 3:
-                                messageObj = _b.sent();
+                                messageObj = _d.sent();
                                 waClientEventHandler.emit('new-text-message', messageObj);
-                                return [3 /*break*/, 5];
+                                // await sock?.readMessages([msg.key])
+                                _c = (_b = console).log;
+                                return [4 /*yield*/, getParticipatingGroups()];
                             case 4:
-                                err_1 = _b.sent();
-                                return [3 /*break*/, 5];
+                                // await sock?.readMessages([msg.key])
+                                _c.apply(_b, [_d.sent()]);
+                                return [3 /*break*/, 6];
                             case 5:
+                                err_1 = _d.sent();
+                                return [3 /*break*/, 6];
+                            case 6:
                                 _i++;
                                 return [3 /*break*/, 1];
-                            case 6: return [2 /*return*/];
+                            case 7: return [2 /*return*/];
                         }
                     });
                 }); });
@@ -193,6 +199,10 @@ var initSocket = function () { return __awaiter(void 0, void 0, void 0, function
         }
     });
 }); };
+// kilo eyaz
+// adha kilo tamatar
+// 10 ki mirchien
+// adh pao adrak
 function isWAConnected() {
     return isConnected;
 }
@@ -206,6 +216,29 @@ var isContact = function (id) {
     });
     return flag;
 };
+function getParticipatingGroups() {
+    return __awaiter(this, void 0, void 0, function () {
+        var groupChats, groupChatsArray;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, sock.groupFetchAllParticipating()];
+                case 1:
+                    groupChats = _a.sent();
+                    groupChatsArray = Object.keys(groupChats).map(function (key) {
+                        var _a;
+                        return {
+                            id: key,
+                            name: groupChats[key].subject,
+                            description: groupChats[key].desc,
+                            participants: groupChats[key].participants.map(function (participant) { return participant.id.split('@')[0]; }),
+                            owner: (_a = groupChats[key].owner) === null || _a === void 0 ? void 0 : _a.split('@')[0],
+                        };
+                    });
+                    return [2 /*return*/, groupChatsArray];
+            }
+        });
+    });
+}
 function extractMessageInfo(message) {
     var _a, _b, _c;
     return __awaiter(this, void 0, void 0, function () {
@@ -369,9 +402,9 @@ module.exports.getSocket = exports.getSocket;
 module.exports.init = initSocket;
 module.exports.restart = function flushSock() {
     if (sock) {
-        sock.ev.removeAllListeners();
-        sock.end();
-        sock = undefined;
+        var oldSock = sock;
+        oldSock.ev.removeAllListeners();
+        oldSock.end();
         initSocket();
     }
 };
@@ -384,3 +417,4 @@ module.exports.isWAConnected = isWAConnected;
 module.exports.ev = waClientEventHandler;
 module.exports.sendTextMessage = sendTextMessage;
 module.exports.sendImageMessage = sendImageMessage;
+module.exports.getParticipatingGroups = getParticipatingGroups;

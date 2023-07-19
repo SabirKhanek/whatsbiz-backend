@@ -21,9 +21,9 @@ async function getGroups() {
             updateGroupsMetadata(groups)
             return groups
         } else {
-            client.getParticipatingGroups().then((groups) => {
-                updateGroupsMetadata(groups)
-            })
+            // client.getParticipatingGroups().then((groups) => {
+            //     updateGroupsMetadata(groups)
+            // })
             return groups
         }
     } else {

@@ -6,3 +6,4 @@ wweb_chat_store.json
 dbstore.sqlite
 products*.xlsx
 test_storage
+./data/*

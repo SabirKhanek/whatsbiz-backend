@@ -132,3 +132,9 @@ Content-Type: application/json
 ### get groups not in collection
 GET http://localhost:3000/api/whatsapp/group-collections/groups-not-in?collectionId=2
 Content-Type: application/json
+
+### delete ad by id
+DELETE http://localhost:3000/api/ads?id=12 HTTP/1.1
+
+### DELETE IMAGE
+DELETE http://localhost:3000/api/images?id=9 HTTP/1.1

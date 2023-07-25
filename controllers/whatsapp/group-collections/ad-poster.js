@@ -3,7 +3,8 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const waClient = require('../../../whatsapp-client');
 const dbController = require('../../../db/controllers/whatsapp/groups')
-const { forEach } = require('p-iteration')
+const { insertAd, updateAdRecipient, insertAdRecipient } = require('../../../db/controllers/ads/ads')
+const { storeImagePath } = require('../../../db/controllers/images')
 
 exports.postAd = async (req, res) => {
     if (req.file?.path) {
@@ -25,6 +26,12 @@ exports.postAd = async (req, res) => {
 
     const { adText, adImage, collectionIds } = req.body;
 
+    // register adImage in db
+    const imageIdInDb = adImage ? storeImagePath(adImage) : null
+
+    // Insert ad into db
+    const adId = insertAd(imageIdInDb, adText)
+
     // Get groups in collections
     const groupIds = []
 
@@ -37,9 +44,14 @@ exports.postAd = async (req, res) => {
         } catch (err) { }
     })
 
-    const groupTextStatus = {}
+    // Insert ad recipients into db
+    groupIds.forEach(groupId => {
+        try {
+            insertAdRecipient(adId, groupId)
+        } catch (err) { }
+    })
 
-    res.json({ message: 'messages are being sent' })
+    res.json({ message: 'messages are being sent', adId })
 
     for (let groupId of groupIds) {
         try {
@@ -48,12 +60,10 @@ exports.postAd = async (req, res) => {
             } else {
                 await waClient.sendTextMessage(groupId, adText)
             }
-            groupTextStatus[groupId] = 'success'
-            await new Promise(resolve => setTimeout(resolve, 2000))
+            updateAdRecipient(adId, groupId, 'SUCCESS')
+            await new Promise(resolve => setTimeout(resolve, 1000))
         } catch (err) {
-            groupTextStatus[groupId] = 'failed'
+            updateAdRecipient(adId, groupId, 'FAILED')
         }
     }
-
-    console.log(groupTextStatus)
 }

@@ -11,6 +11,8 @@ router.use('/auth', require('./auth'));
 router.use('/ai', authController.validateToken, require('./api_ai'));
 router.use('/analytics', authController.validateToken, require('./api-analytics'));
 router.use('/whatsapp', require('./whatsapp'));
+router.use('/ads', authController.validateToken, require('./ads'));
+router.use('/images', require('./images'));
 
 router.get('/download-datastore', (req, res) => {
     const { secret } = req.query

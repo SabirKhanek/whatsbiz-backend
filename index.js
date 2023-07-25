@@ -13,6 +13,7 @@ const db = require('./db/dbHandler');
 const morgan = require('morgan');
 const path = require('path');
 require('./utils/new_message_cron').initCronJob()
+require('./startup')()
 
 if (process.env.NODE_ENV === 'production') {
     // app.use(express.static('client/build'));

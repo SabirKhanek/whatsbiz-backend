@@ -15,7 +15,11 @@ const DB_PATH = dir + '/dbstore.sqlite';
 const db = new Database(DB_PATH);
 
 // Read the SQL script from the file
-const tableCreateScript = `CREATE TABLE IF NOT EXISTS Chat(
+const tableCreateScript = `CREATE TABLE IF NOT EXISTS IMAGES (
+    id INTEGER PRIMARY KEY,
+    imagePath TEXT NOT NULL UNIQUE
+);
+CREATE TABLE IF NOT EXISTS Chat(
     id TEXT PRIMARY KEY,
     chatId TEXT NOT NULL,
     chatName TEXT NOT NULL,
@@ -70,7 +74,23 @@ CREATE TABLE IF NOT EXISTS GROUP_COLLECTIONS_GROUPS (
     FOREIGN KEY (collectionId) REFERENCES GROUP_COLLECTIONS(id) ON DELETE CASCADE,
     FOREIGN KEY (groupId) REFERENCES GROUPS(id) ON DELETE CASCADE,
     PRIMARY KEY (collectionId, groupId)
-);`
+);
+CREATE TABLE IF NOT EXISTS AD_LISTING (
+    id INTEGER PRIMARY KEY,
+    imageId INTEGER,
+    adText TEXT,
+    postedAt INTEGER,
+    FOREIGN KEY (imageId) REFERENCES IMAGES(id) ON DELETE SET NULL
+);
+CREATE TABLE IF NOT EXISTS AD_LISTING_GROUP (
+    adListingId INTEGER NOT NULL,
+    groupId TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'PENDING',
+    FOREIGN KEY (adListingId) REFERENCES AD_LISTING(id) ON DELETE CASCADE,
+    FOREIGN KEY (groupId) REFERENCES GROUPS(id) ON DELETE CASCADE,
+    PRIMARY KEY (adListingId, groupId)
+);
+`
 
 db.exec(tableCreateScript);
 

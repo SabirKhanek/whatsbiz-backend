@@ -14,6 +14,7 @@
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "libsignal-node": "git+https://github.com/adiwajshing/libsignal-node.git",
+    "lodash": "^4.17.21",
     "mime": "^3.0.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",

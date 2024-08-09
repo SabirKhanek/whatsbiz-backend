@@ -7,3 +7,4 @@ dbstore.sqlite
 products*.xlsx
 test_storage
 ./data/*
+test_key.js
